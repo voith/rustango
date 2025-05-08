@@ -1,4 +1,4 @@
-# rustango
+# Rustango
 
 **Rustango** is a minimalist web framework written in pure Rust, inspired by Django’s class-based views and Python’s expressiveness — but built the Rust way.
 
