@@ -1,4 +1,4 @@
-use super::server::{Response, View};
+use rustango::server::{Response, View};
 
 pub struct HomePageView;
 pub struct SomePageView;

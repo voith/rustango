@@ -1,4 +1,4 @@
-use super::server::BoxedView;
+use rustango::server::BoxedView;
 use super::views::{HomePageView, SomePageView};
 
 pub fn get_routes() -> Vec<(&'static str, BoxedView)> {

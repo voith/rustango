@@ -1,7 +1,5 @@
-[package]
-name = "basic_web_server"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-httparse = "1.8"
+[workspace]
+members = [
+    "rustango",
+    "app",
+]

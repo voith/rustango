@@ -1,8 +1,5 @@
-use basic_web_server::{
-    server::Server,
-    urls::get_routes
-};
-
+use rustango::server::Server;
+use app::urls::get_routes;
 
 fn main() {
     let mut ser = Server::new();
