@@ -1,5 +1,5 @@
-use rustango::server::Server;
 use app::urls::get_routes;
+use rustango::server::Server;
 
 fn main() {
     let mut ser = Server::new();

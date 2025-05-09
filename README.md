@@ -23,7 +23,7 @@ This is my **first Rust project**, and I'm learning the language by building eve
 
 ```bash
 git clone https://github.com/voith/rustango.git
-cd app
+cd rustango/app
 cargo run
 ```
 

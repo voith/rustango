@@ -1,4 +1,4 @@
-use rustango::server::{Response, View};
+use rustango::{http::Response, views::View};
 
 pub struct HomePageView;
 pub struct SomePageView;
@@ -20,12 +20,11 @@ impl View for HomePageView {
         "#;
         Response {
             data: html.to_string(),
-            status_code:200,
-            version: "1.1"
+            status_code: 200,
+            version: "1.1",
         }
     }
 }
-
 
 impl View for SomePageView {
     fn get(&self) -> Response {
@@ -44,8 +43,8 @@ impl View for SomePageView {
         "#;
         Response {
             data: html.to_string(),
-            status_code:200,
-            version: "1.1"
+            status_code: 200,
+            version: "1.1",
         }
     }
 }
