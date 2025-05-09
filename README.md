@@ -23,7 +23,7 @@ This is my **first Rust project**, and I'm learning the language by building eve
 
 ```bash
 git clone https://github.com/voith/rustango.git
-cd rustango
+cd app
 cargo run
 ```
 
@@ -74,7 +74,7 @@ use yourcrate::urls::get_routes;
 fn main() {
     let mut ser = Server::new();
     ser.register_routes(get_routes());
-    ser.start(None);
+    ser.start(None); // Some(8080)
 }
 ```
 
