@@ -8,21 +8,25 @@ use std::{
     net::{TcpListener, TcpStream},
     sync::Arc,
 };
+pub struct ServerConfig {
+    pub routes: HashMap<String, BoxedView>,
+    pub port: Option<i32>,
+    pub pool_size: Option<usize>
+}
 
 pub struct Server {
-    routes: HashMap<String, BoxedView>,
+    config: ServerConfig
 }
 
 impl Server {
-    pub fn new() -> Self {
-        let routes: HashMap<String, BoxedView> = HashMap::new();
-        Server { routes }
+    pub fn new(config: ServerConfig) -> Self {
+        Self { config }
     }
 
-    pub fn start(self: Arc<Self>, port: Option<i32>, pool_size: Option<usize>) {
+    pub fn start(self: Arc<Self>) {
         // add default size of 1
-        let size = pool_size.unwrap_or(1);
-        let listener = match port {
+        let size = self.config.pool_size.unwrap_or(1);
+        let listener = match self.config.port {
             Some(_port) => {
                 let address = format!("127.0.0.1:{_port}");
                 println!("address: {}", address);
@@ -42,18 +46,8 @@ impl Server {
         }
     }
 
-    pub fn register_routes(&mut self, routes: Vec<(&'static str, BoxedView)>) {
-        routes.into_iter().for_each(|(path, view)| {
-            self.register_route(path, view);
-        });
-    }
-
-    pub fn register_route(&mut self, route: &str, handler: BoxedView) {
-        self.routes.insert(route.to_string(), handler);
-    }
-
     fn get_handler(&self, route: &str) -> Option<&BoxedView> {
-        self.routes.get(route)
+        self.config.routes.get(route)
     }
 
     pub fn handle_request(&self, mut stream: TcpStream) {

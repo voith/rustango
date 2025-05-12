@@ -56,27 +56,33 @@ impl View for HomePageView {
 ## 🛣️ Registering Routes
 In urls.rs:
 ```rust
-use rustango::server::BoxedView;
-use yourcrate::views::{HomePageView};
+use std::collections::HashMap;
 
-pub fn get_routes() -> Vec<(&'static str, BoxedView)> {
-    vec![
-        ("/", Box::new(HomePageView)),
-    ]
+use <YOUR_CREATE>::views::{HomePageView, SomePageView}; // assuming you have created these views in your crate
+use rustango::views::BoxedView;
+
+pub fn get_routes() -> HashMap<String, BoxedView> {
+    let mut map: HashMap<String, BoxedView> = HashMap::new();
+    map.insert("/".to_string(), Box::new(HomePageView));
+    map.insert("/somepage".to_string(), Box::new(SomePageView));
+    map
 }
 ```
 ## Starting the sever
 In main.rs:
 ```rust
-use rustango::server::Server;
-use yourcrate::urls::get_routes;
+use rustango::server::{Server, ServerConfig};
 use std::sync::Arc;
+use <YOUR_CRATE>::urls::get_routes;
 
 fn main() {
-    let mut ser = Server::new();
-    ser.register_routes(get_routes());
-    let ser = Arc::new(ser);
-    ser.start(Some(8080), Some(4)); // port, threadpool pool_size
+    let config = ServerConfig {
+        routes: get_routes(),
+        port: Some(8080),
+        pool_size: Some(4)
+    };
+    let server = Arc::new(Server::new(config));
+    server.start();
 }
 ```
 
