@@ -70,11 +70,13 @@ In main.rs:
 ```rust
 use rustango::server::Server;
 use yourcrate::urls::get_routes;
+use std::sync::Arc;
 
 fn main() {
     let mut ser = Server::new();
     ser.register_routes(get_routes());
-    ser.start(None); // Some(8080)
+    let ser = Arc::new(ser);
+    ser.start(Some(8080), Some(4)); // port, threadpool pool_size
 }
 ```
 

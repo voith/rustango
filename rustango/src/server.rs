@@ -1,10 +1,12 @@
 use super::http::{RequestErrors, Response, parse_request};
 use super::views::BoxedView;
+use super::thread_pool::ThreadPool;
 use httparse::{EMPTY_HEADER, Request};
 use std::{
     collections::HashMap,
     io::prelude::*,
     net::{TcpListener, TcpStream},
+    sync::Arc,
 };
 
 pub struct Server {
@@ -17,7 +19,9 @@ impl Server {
         Server { routes }
     }
 
-    pub fn start(&self, port: Option<i32>) {
+    pub fn start(self: Arc<Self>, port: Option<i32>, pool_size: Option<usize>) {
+        // add default size of 1
+        let size = pool_size.unwrap_or(1);
         let listener = match port {
             Some(_port) => {
                 let address = format!("127.0.0.1:{_port}");
@@ -27,10 +31,14 @@ impl Server {
             None => TcpListener::bind("127.0.0.1:0").unwrap(),
         };
         let addr = listener.local_addr().unwrap();
+        let thread_pool = ThreadPool::new(size);
         println!("started server. Vist http://{}", addr);
         for stream in listener.incoming() {
             let stream = stream.unwrap();
-            self.handle_request(stream);
+            let server = Arc::clone(&self);
+            thread_pool.execute(move ||{
+                server.handle_request(stream);
+            });
         }
     }
 
